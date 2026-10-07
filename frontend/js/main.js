@@ -1,4 +1,4 @@
-const PRODUCTION_API = "";
+const PRODUCTION_API = "https://personal-wrapped-media-1.onrender.com";
 
 const API_BASE = (
     window.MEDIA_WRAPPED_API ||
