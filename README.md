@@ -9,9 +9,6 @@ I built it because I log everything I watch, and I wanted to see the whole year 
 ![Home](screenshots/home.png)
 ![Dark mode](screenshots/home-dark.png)
 
-![Home](screenshots/home.png)
-![Dark mode](screenshots/home-dark.png)
-
 ## What it does
 
 - **Imports your real data.** Upload your Letterboxd ZIP export and your Serializd JSON export.
