@@ -4,10 +4,14 @@ A "Spotify Wrapped" style page for movies and series. You upload your Letterboxd
 
 I built it because I log everything I watch, and I wanted to see the whole year in one place instead of scrolling through two different apps.
 
+**🌐 Live Website:** [Personal Wrapped Media](https://personal-wrapped-media-frontend-8fq.vercel.app/)
+
 ![Home](screenshots/home.png)
 ![Dark mode](screenshots/home-dark.png)
 
-Visit website :[Personal-wrapped-media] (https://personal-wrapped-media-frontend-8fq.vercel.app/)
+![Home](screenshots/home.png)
+![Dark mode](screenshots/home-dark.png)
+
 ## What it does
 
 - **Imports your real data.** Upload your Letterboxd ZIP export and your Serializd JSON export.
