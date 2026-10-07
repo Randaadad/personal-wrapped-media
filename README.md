@@ -1,4 +1,4 @@
-# Media Wrapped
+# 🎬Media Wrapped
 
 A "Spotify Wrapped" style page for movies and series. You upload your Letterboxd and Serializd exports, and it turns them into a yearly summary: your top picks, favorite genres, hours watched, and a month-by-month activity chart.
 
