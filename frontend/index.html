@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Wrapped</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:,">
+
+    <script>
+        /* Visitors with saved data skip the welcome screen */
+        try {
+            if (localStorage.getItem("letterboxdData") || localStorage.getItem("serializdData")) {
+                document.documentElement.classList.add("has-data");
+            }
+        } catch (error) {}
+    </script>
+
+    <style>
+        /* ---- empty state: what a new visitor sees ---- */
+        html:not(.has-data) #main-content > :not(#welcome):not(.letterboxd_import):not(.serializd_import) { display: none !important; }
+        html:not(.has-data) #footer { position: fixed; left: 0; right: 0; bottom: 0; }
+        html.has-data #welcome { display: none !important; }
+        #welcome[hidden], #clear-data[hidden] { display: none !important; }
+        #welcome { max-width: 760px; margin: 12vh auto; padding: 0 24px; text-align: left; }
+        #welcome .welcome_eyebrow { font-size: 13px; letter-spacing: .12em; opacity: .65; margin: 0 0 16px; }
+        #welcome h2 { font-family: inherit; font-weight: 400; font-size: clamp(34px, 6vw, 60px); line-height: 1.05; margin: 0 0 20px; }
+        #welcome p { font-size: 16px; line-height: 1.6; opacity: .75; margin: 0 0 32px; max-width: 560px; }
+        #welcome .welcome_eyebrow { margin: 0 0 16px; }
+        #welcome .welcome_actions { display: flex; flex-wrap: wrap; gap: 16px; }
+        #welcome button, #clear-data { font: inherit; color: inherit; background: transparent; border: 1px solid currentColor; padding: 16px 24px; cursor: pointer; letter-spacing: .08em; font-size: 13px; text-transform: uppercase; }
+        #welcome button:hover, #clear-data:hover { opacity: .65; }
+        #clear-data { display: block; margin: 48px auto; border-color: transparent; border-bottom-color: currentColor; padding: 6px 2px; opacity: .55; }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar" id="navbar">
+        <div class="navbar_container">
+            <a href="#" class="logo">
+                Media Wrapped
+            </a>
+            
+            <div class="nav_links">
+                <a href="#" class="nav_link active" data-category="home">Home</a>
+                <a href="#" class="nav_link" data-category="movies">Movies</a>
+                <a href="#" class="nav_link" data-category="series">Series</a>
+            </div>
+
+            <div class="navbar_actions" id="navbar-actions">
+
+                <button class="log_media_btn" id="log-media-btn" type="button">
+                    <span class="log_media_plus" aria-hidden="true">+</span>
+                    <span class="log_media_text">Log Media</span>
+                </button>
+
+                <span class="navbar_divider" aria-hidden="true"></span>
+
+                <button class="theme_toggle" id="theme_toggle" type="button">
+                    ☀
+                </button>
+
+            </div>
+        </div>
+    </nav>
+
+    <main class="main_content" id="main-content">
+
+        <!--==========================welcome (empty state)====================-->
+        <section id="welcome">
+            <div class="welcome_copy">
+                <p class="welcome_eyebrow">YOUR MEDIA WRAPPED</p>
+                <h2>Upload your data to see <em>your year.</em></h2>
+                <p class="welcome_lead">
+                    Two files, one minute. We turn them into your top picks,
+                    genres and monthly activity.
+                </p>
+
+                <div class="welcome_steps">
+                    <div class="welcome_step">
+                        <span class="step_num">01</span>
+                        <div class="step_text">
+                            <strong>Letterboxd</strong>
+                            <small>Settings &rarr; Import &amp; Export &rarr; ZIP</small>
+                        </div>
+                        <button type="button" class="open-import step_btn step_btn_primary" data-import="movies">Upload</button>
+                    </div>
+
+                    <div class="welcome_step">
+                        <span class="step_num">02</span>
+                        <div class="step_text">
+                            <strong>Serializd</strong>
+                            <small>Account &rarr; Export &rarr; JSON</small>
+                        </div>
+                        <button type="button" class="open-import step_btn" data-import="series">Upload</button>
+                    </div>
+                </div>
+
+                <p class="welcome_privacy">Processed once, never stored on our server.</p>
+            </div>
+
+            <div class="hero_illustration welcome_art" aria-hidden="true">
+                <div class="illustration_blob"></div>
+                <div class="illustration_rect rect_one"></div>
+                <div class="illustration_rect rect_two"></div>
+                <div class="illustration_rect rect_three"></div>
+                <div class="illustration_icon"><span class="icon_dot"></span></div>
+            </div>
+        </section>
+    
+        <!--==========================hero section====================-->
+        <section class="hero" id="hero">
+            <div class="hero_content">
+                <p class="hero_label" id="hero-label">
+                    Your 2026
+                </p>
+
+                <h1 class="hero_title" id="hero-title">
+                    YOUR MEDIA JOURNEY
+                </h1>
+
+                <p class="hero_description" id="hero-description">
+                    Upload your data to see your year
+                </p>
+            </div>
+
+            <div class="hero_stats" id="hero-stats">
+                <div class="stat">
+                    <span class="stat_value" id="total-titles">—</span>
+                    <span class="stat_label">Titles</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat_value" id="total-hours">—</span>
+                    <span class="stat_label">HOURS</span>
+                    <span class="stat_note" id="hours-note"></span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat_value" id="total-episodes">—</span>
+                    <span class="stat_label">EPISODES</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat_value" id="average-rating">—</span>
+                    <span class="stat_label">AVG. RATING</span>
+                </div>
+            </div>
+
+            <div class="hero_illustration" aria-hidden="true">
+                <div class="illustration_blob"></div>
+                <div class="hero_posters" id="hero-posters"></div>
+                <div class="illustration_rect rect_one"></div>
+                <div class="illustration_rect rect_two"></div>
+                <div class="illustration_rect rect_three"></div>
+                <div class="illustration_icon">
+                    <span class="icon_dot"></span>
+                </div>
+            </div>
+        </section>
+
+        <!--===========================top picks=========================-->
+
+        <section class="top_picks" id="top-picks">
+
+            <div class="section_heading">
+
+                <div class="section_heading_text">
+                    <p class="section_eyebrow">
+                        01 — YOUR TOP SERIES
+                    </p>
+
+                    <h2 class="section_title">
+                        TOP PICKS
+                    </h2>
+                </div>
+
+                <button class="view_all" id="view-all" type="button">
+                    VIEW ALL
+                </button>
+
+            </div>
+
+
+            <div class="top_picks_grid" id="top-picks-grid">
+            </div>
+
+        </section>
+
+        <!--================statistics==============-->
+
+        <section class="statistics" id="statistics">
+            <div class="section_heading">
+                <p class="section_eyebrow">
+                    02 — YOUR TASTE
+                </p>
+
+                <h2 class="section_title">
+                    The stories you kept coming back to.
+                </h2>
+            </div>
+
+            <div class="statistics_grid">
+
+                <!--=========genre breakdown=============-->
+
+                <article class="stat_card" id="genre-breakdown">
+                    <div class="stat_card_heading">
+                        <div>
+                            <p class="stat_card_eyebrow">
+                                GENRES
+                            </p>
+
+                            <h3 class="stat_card_title">
+                                GENRE BREAKDOWN
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="donut_container">
+                        <canvas id="genre-chart"></canvas>
+                        <div class="donut_center">
+                            <span class="donut_total" id="genre-total">
+                                —
+                            </span>
+                            <span class="donut_label">
+                                TITLES
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="genre_legend" id="genre-legend">
+                    </div>
+                    
+                </article>
+
+            </div>
+
+        </section>
+
+        <!--==============monthly activity================-->
+
+        <section class="activity" id="activity">
+
+            <div class="section_heading activity_heading">
+
+                <div>
+                    <p class="section_eyebrow">
+                        YOUR WATCHING HABITS
+                    </p>
+
+                    <h2 class="section_title">
+                        MONTHLY ACTIVITY
+                    </h2>
+                </div>
+
+                <div class="activity_filter">
+                    <label for="activity-year-filter">VIEW</label>
+
+                    <select id="activity-year-filter">
+                        <option value="all">ALL</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="activity_container">
+
+                <div class="activity_chart_wrapper">
+                    <canvas id="activity-chart"></canvas>
+                </div>
+
+                <div class="activity_info">
+
+                    <div class="highlight">
+                        <p class="highlight_label">
+                            PEAK MONTH
+                        </p>
+
+                        <h3 class="highlight_value" id="peak-month">
+                            —
+                        </h3>
+
+                        <p class="highlight_meta" id="peak-month-hours">
+                            
+                        </p>
+                    </div>
+
+                    <div class="highlight">
+                        <p class="highlight_label">
+                            BUSIEST DAY
+                        </p>
+
+                        <h3 class="highlight_value" id="average-session">
+                            —
+                        </h3>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!--=====================highlights================-->
+
+        <section class="highlights" id="highlights">
+
+            <div class="section_heading">
+
+                <p class="section_eyebrow">
+                    04 — HIGHLIGHTS
+                </p>
+
+                <h2 class="section_title">
+                    YOUR YEAR IN HIGHLIGHTS
+                </h2>
+
+            </div>
+
+
+            <div class="highlights_grid" id="highlights-grid">
+            </div>
+
+        </section>
+
+        <!--================ Letterboxd Import ================-->
+        <section class="letterboxd_import" id="letterboxd-import" hidden>
+<button type="button" class="import_close" id="close-letterboxd-import" aria-label="Close">×</button>
+            <div class="section_heading">
+                <div class="section_heading_text">
+                    <p class="section_eyebrow">
+                        IMPORT YOUR DATA
+                    </p>
+
+                    <h2 class="section_title">
+                        Letterboxd
+                    </h2>
+                </div>
+            </div>
+
+            <div class="letterboxd_upload">
+                <label class="dropzone" id="letterboxd-drop" for="letterboxd-zip">
+                    <svg class="dz_icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+                    <span class="dz_title">Drop your ZIP here or <u>browse</u></span>
+                    <span class="dz_file" id="letterboxd-file-name">No file chosen</span>
+                    <input type="file" id="letterboxd-zip" accept=".zip" hidden>
+                </label>
+
+                <p class="import_hint">Find it in Letterboxd under Settings, Import &amp; Export.</p>
+
+                <button type="button" id="import-letterboxd-btn" class="needs-file">IMPORT</button>
+                <div class="import_progress" aria-hidden="true"><span></span></div>
+
+                <p id="letterboxd-import-status"></p>
+            </div>
+        </section>
+
+        <section class="serializd_import" id="serializd-import" hidden>
+<button type="button" class="import_close" id="close-serializd-import" aria-label="Close">×</button>
+            <div class="section_heading">
+                <div class="section_heading_text">
+                    <p class="section_eyebrow">
+                        IMPORT YOUR DATA
+                    </p>
+
+                    <h2 class="section_title">
+                        Serializd
+                    </h2>
+                </div>
+            </div>
+
+            <div class="serializd_upload">
+                <label class="dropzone" id="serializd-drop" for="serializd-json">
+                    <svg class="dz_icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+                    <span class="dz_title">Drop your JSON here or <u>browse</u></span>
+                    <span class="dz_file" id="serializd-file-name">No file chosen</span>
+                    <input type="file" id="serializd-json" accept=".json" hidden>
+                </label>
+
+                <p class="import_hint">Find it in your Serializd account under Export.</p>
+
+                <button type="button" id="import-serializd-btn" class="needs-file">IMPORT</button>
+                <div class="import_progress" aria-hidden="true"><span></span></div>
+
+                <p id="serializd-import-status"></p>
+            </div>
+        </section>
+
+    </main>
+
+<!--============Footer=================-->
+
+<footer class="footer" id="footer">
+
+    <p class="footer_text">
+        MEDIA WRAPPED . 2026
+    </p>
+
+</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
